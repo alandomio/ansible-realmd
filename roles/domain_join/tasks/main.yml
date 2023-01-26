@@ -9,7 +9,7 @@
 
 - name: Install pip
   apt: 
-    name: python-pip
+    name: python3-pip
     state: present
     update_cache: yes
 
@@ -20,7 +20,7 @@
 
 - name: Install AD Domain packages
   apt: 
-    name: {{ item }}
+    name: "{{ item }}"
     state: present 
     update_cache: yes
   with_items:
@@ -61,7 +61,7 @@
 
 - name: Discover realm debug
   debug: 
-    msg: {{ realm_discover_results.stdout }}
+    msg: "{{ realm_discover_results.stdout }}"
 
 - name: Create kerberos ticket
   expect:
@@ -78,7 +78,7 @@
 
 - name: Debug realm_list_results
   debug:
-    msg: {{ realm_list_results.stdout }}
+    msg: "{{ realm_list_results.stdout }}"
 
 - name: Join system to AD
   expect:
@@ -97,7 +97,8 @@
   command: cp -f /etc/sudoers /etc/sudoers.bak
 
 - name: Add domain admins group to sudoers
-  lineinfile: dest=/etc/sudoers.tmp state=present line='%domain\ admins ALL=(ALL:ALL) ALL' regexp='^%domain'
+  lineinfile: dest=/etc/sudoers.tmp state=present line='%domain\ admins@lan.infordata.it ALL=(ALL:ALL) ALL' regexp='^%domain'
+
 
 - name: Final sudoers file check
   shell: visudo -q -c -f /etc/sudoers.tmp && cp -f /etc/sudoers.tmp /etc/sudoers
